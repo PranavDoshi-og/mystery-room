@@ -31,3 +31,4 @@ export default function DifficultyBadge({ difficulty, size = 'sm' }) {
     </span>
   );
 }
+

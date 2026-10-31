@@ -224,3 +224,4 @@ You must respond with ONLY a valid JSON object matching this exact schema:
     return generateFallbackMystery(premise, normalizedDifficulty);
   }
 }
+

@@ -47,3 +47,4 @@ router.post('/:id/accuse', submitAccusation);
 router.get('/:id/result', getCaseResult);
 
 export default router;
+

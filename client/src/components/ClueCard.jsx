@@ -135,3 +135,4 @@ export default function ClueCard({ clue, onDiscover }) {
     </div>
   );
 }
+

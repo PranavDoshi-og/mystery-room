@@ -202,3 +202,4 @@ node server/test-api.js
 - [x] **Authoritative Scoring**: Backend calculates net score (Base + Clues - Hints) with a minimum floor of 0.
 - [x] **Case Results & Narrative Reveal**: Displays celebratory verdict, score audit table, culprit profile, and full crime timeline.
 - [x] **Responsive Detective Noir UI**: Atmospheric design built with Tailwind CSS, Lucide icons, and canvas-confetti.
+

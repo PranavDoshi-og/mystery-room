@@ -82,3 +82,4 @@ export default function SuspectCard({ suspect, isSelected, onSelect, selectable 
     </div>
   );
 }
+

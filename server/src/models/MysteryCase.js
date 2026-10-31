@@ -133,3 +133,4 @@ MysteryCaseSchema.methods.toSanitizedJSON = function() {
 };
 
 export const MysteryCase = mongoose.model('MysteryCase', MysteryCaseSchema);
+

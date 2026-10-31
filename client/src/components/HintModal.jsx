@@ -63,3 +63,4 @@ export default function HintModal({ isOpen, onClose, onConfirm, hintsRemaining, 
     </div>
   );
 }
+
