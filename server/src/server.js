@@ -25,18 +25,23 @@ app.use((req, res, next) => {
   next();
 });
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
+// Health check handler
+const healthHandler = (req, res) => {
   res.json({
     status: 'ok',
     service: 'AI Mystery Room API',
     timestamp: new Date().toISOString(),
     geminiConfigured: Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key'),
   });
-});
+};
 
-// Case routes
+// Mount health check at BOTH /api/health AND /health (anti-404 safeguard)
+app.get('/api/health', healthHandler);
+app.get('/health', healthHandler);
+
+// Mount case routes at BOTH /api/cases AND /cases (anti-404 safeguard)
 app.use('/api/cases', caseRoutes);
+app.use('/cases', caseRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -44,9 +49,9 @@ app.get('/', (req, res) => {
     message: 'Welcome to AI Mystery Room API',
     status: 'online',
     endpoints: {
-      health: '/api/health',
-      createCase: 'POST /api/cases',
-      getCase: 'GET /api/cases/:id',
+      health: '/api/health or /health',
+      createCase: 'POST /api/cases or /cases',
+      getCase: 'GET /api/cases/:id or /cases/:id',
       discoverClue: 'POST /api/cases/:id/clues/:clueId/discover',
       requestHint: 'POST /api/cases/:id/hints',
       submitAccuse: 'POST /api/cases/:id/accuse',
@@ -71,7 +76,7 @@ async function startServer() {
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`===============================================`);
       console.log(`🕵️ AI Mystery Room API running on port ${PORT}`);
-      console.log(`📡 Health Check: /api/health`);
+      console.log(`📡 Health Check: /api/health & /health`);
       console.log(`===============================================`);
     });
   } catch (error) {
