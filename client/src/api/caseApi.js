@@ -1,15 +1,41 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+export const getBaseUrl = () => {
+  const custom = typeof window !== 'undefined' ? localStorage.getItem('mystery_api_url') : null;
+  if (custom && custom.trim()) {
+    return custom.trim().replace(/\/+$/, '');
+  }
+  return import.meta.env.VITE_API_BASE_URL || '/api';
+};
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+// Dynamic baseURL interceptor
+api.interceptors.request.use((config) => {
+  config.baseURL = getBaseUrl();
+  return config;
+});
+
 export const caseApi = {
+  getApiUrl: () => getBaseUrl(),
+
+  setApiUrl: (url) => {
+    let clean = url.trim().replace(/\/+$/, '');
+    if (!clean.endsWith('/api') && !clean.includes('/api/')) {
+      clean = `${clean}/api`;
+    }
+    localStorage.setItem('mystery_api_url', clean);
+    return clean;
+  },
+
+  resetApiUrl: () => {
+    localStorage.removeItem('mystery_api_url');
+  },
+
   // Get recent cases
   getRecentCases: async () => {
     const res = await api.get('/cases');
@@ -53,11 +79,11 @@ export const caseApi = {
   },
 
   // Health check
-  checkHealth: async () => {
-    const res = await api.get('/health');
+  checkHealth: async (overrideUrl) => {
+    const targetUrl = overrideUrl ? `${overrideUrl.replace(/\/+$/, '')}/health` : `${getBaseUrl()}/health`;
+    const res = await axios.get(targetUrl, { timeout: 8000 });
     return res.data;
   }
 };
 
 export default api;
-
